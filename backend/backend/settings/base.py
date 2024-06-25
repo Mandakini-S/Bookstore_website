@@ -27,12 +27,12 @@ DEFAULT_APP = [
 
 LOCAL_APPS = [
     "api",
-    # "account",
+    "account",
 ]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    # "rest_framework_simplejwt",
+    "rest_framework_simplejwt",
 ]
 
 INSTALLED_APPS = DEFAULT_APP + LOCAL_APPS + THIRD_PARTY_APPS
@@ -81,6 +81,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'account.UserData'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
