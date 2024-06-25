@@ -20,3 +20,4 @@ urlpatterns = [
     path('categories/<int:id>/', CategoryView.as_view()),
     path('categories/<int:id>/update', CategoryView.as_view())
 ]
+
