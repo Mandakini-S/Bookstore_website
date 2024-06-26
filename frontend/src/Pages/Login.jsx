@@ -1,19 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../Context/AuthContext';
+import axios from 'axios';
 import loginimage from '../assets/login_page.jpg';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
-      navigate('/');
+      const response = await axios.post('http://127.0.0.1:8000/account/api/login/', {
+        email,
+        password,
+      });
+      if (response.status === 200) {
+        // Assuming successful login, navigate to '/'
+        navigate('/');
+      }
     } catch (error) {
       console.error('There was an error logging in!', error);
       // Handle login error, e.g., show a notification
@@ -41,6 +46,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
+                required
               />
             </div>
             <div>
@@ -50,6 +56,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                required
               />
             </div>
 
@@ -62,7 +69,7 @@ const Login = () => {
             </div>
 
             <div>
-              <button type="submit" className="bg-blue-600 text-white rounded-xl h-14 w-[459px] text-lg"style={{ backgroundColor: '#f48908' }}>
+              <button type="submit" className="bg-blue-600 text-white rounded-xl h-14 w-[459px] text-lg" style={{ backgroundColor: '#f48908' }}>
                 Log In
               </button>
             </div>

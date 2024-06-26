@@ -7,11 +7,25 @@ import About from './Pages/About';
 import Navbar from './Component/Navbar';
 import Cart from './Pages/Cart';
 import Footer from './Component/Footer'
-import { AuthProvider } from './Context/AuthContext';
+import ProductPreview from './Pages/ProductPreview';
+// import { AuthProvider } from './Context/AuthContext';
+
+const product = {
+  title: 'Cool Sneakers',
+  description: 'These are the coolest sneakers you will ever find!',
+  price: 129.99,
+  images: [
+    'https://via.placeholder.com/400x400?text=Main+Image',
+    'https://via.placeholder.com/400x400?text=Image+1',
+    'https://via.placeholder.com/400x400?text=Image+2',
+    'https://via.placeholder.com/400x400?text=Image+3'
+  ]
+};
+
 
 function App() {
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <BrowserRouter>
         <Navbar />
         <Routes>
@@ -20,10 +34,11 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About/>} />
           <Route path="/cart" element={<Cart/>} />
+          <Route path="/product/:id" element={<ProductPreview product={product} />} />
         </Routes>
         <Footer/>
       </BrowserRouter>
-    </AuthProvider>
+    // </AuthProvider>
   );
 }
 
