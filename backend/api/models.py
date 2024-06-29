@@ -1,5 +1,9 @@
 from django.db import models  
 import datetime 
+from django.utils.translation import gettext_lazy as _
+
+def upload_to(instance,filename):
+    return 'products/{filename}'.format(filename=filename)
 
 # Create your models here.  
 
@@ -28,7 +32,7 @@ class Products(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1) 
     description = models.CharField( 
         max_length=250, default='', blank=True, null=True) 
-    image = models.ImageField(upload_to='uploads/products/') 
+    image = models.ImageField(_("Image"),upload_to=upload_to, default='products/default.jpg') 
   
     @staticmethod
     def get_products_by_id(ids): 

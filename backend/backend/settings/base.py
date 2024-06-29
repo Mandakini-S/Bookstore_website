@@ -3,8 +3,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+print(f"BASE_DIR: {BASE_DIR}")
 env_path = load_dotenv(os.path.join(BASE_DIR, ".venv"))
 
 # load_dotenv(env_path)
@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 
@@ -114,7 +115,15 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+# STATICFILES_DIRS=[
+#     # os.path.join(BASE_DIR,"uploads/products")
+#     "/home/mandakini/Desktop/Bookstore__website/backend/uploads"
+# ]
+# STATIC_ROOT=os.path.join(BASE_DIR,"static_cdn","static_root")
 
+
+MEDIA_ROOT=os.path.join(BASE_DIR,"uploads")
+MEDIA_URL = '/uploads/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
