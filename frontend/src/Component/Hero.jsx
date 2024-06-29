@@ -60,7 +60,7 @@ const Hero = () =>{
           New Book collection
         </p>
         <p className="text-2xl md:text-4xl lg:text-5xl font-Poppins text-center text-white  pt-16 md:pt-32 absolute top-32 left-0 md:left-[250px]">
-          Get up to 15% Off
+          Get up to 10% Off
         </p>
         <p className="text-2xl md:text-4xl lg:text-5xl font-Poppins text-center text-white  pt-16 md:pt-32 absolute top-44 left-0 md:left-[250px]">
           New Arrivals

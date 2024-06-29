@@ -26,14 +26,14 @@ const ProductPreview = () => {
   if (!product) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col items-center max-w-4xl mx-auto my-10 p-5 border border-gray-300 rounded-lg">
-      <div className="flex flex-col md:flex-row w-full items-center md:items-start">
+    <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5 border-2 border-gray-300 rounded-2xl md:mx-20">
+      <div className="flex flex-col md:flex-row w-full items-center">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start">
           <img src={mainImage} alt={product.name} className="w-full max-w-xs rounded-lg" />
         </div>
-        <div className="text-center md:text-left mt-5 md:mt-0 md:ml-10">
+        <div className="text-center md:text-left mt-5 md:mt-0 md:ml-10 flex-grow flex flex-col justify-center">
           <h1 className="text-2xl font-bold">{product.name}</h1>
-          <p className="mt-2 text-gray-600">{product.description}</p>
+          <p className="mt-2 text-gray-600 flex-grow">{product.description}</p>
           <h2 className="mt-3 text-xl font-semibold">${product.price}</h2>
           <div className="flex justify-center md:justify-start mt-5 space-x-4">
             {product.images && product.images.map((image, index) => (

@@ -143,11 +143,11 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex items-center mx-5">
-        <button className="font-poppins cursor-pointer text-lg m-5 border text-black dark:text-white bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 rounded-3xl px-4 py-1 active:bg-slate-200 dark:active:bg-slate-700" style={{ backgroundColor: '#f48908' }}>
-  <NavLink to="/login" className="hover:text-black-400 dark:hover:text-black-300">
-    Login
-  </NavLink>
-</button>
+        <button className="font-poppins cursor-pointer text-lg m-5 border text-black dark:text-white bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 rounded-3xl px-4 py-1 hover:text- active:bg-slate-200 dark:active:bg-slate-700" style={{ backgroundColor: '#347576' }}>
+      <NavLink to="/login" className="hover:text-#f48908 dark:hover:text-#f48908">
+        Login
+      </NavLink>
+    </button>
 
         </div>
       </div>
