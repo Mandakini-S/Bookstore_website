@@ -7,6 +7,7 @@ import About from './Pages/About';
 import Navbar from './Component/Navbar';
 import Cart from './Pages/Cart';
 import Footer from './Component/Footer'
+import Product from './Pages/Product';
 import ProductPreview from './Pages/ProductPreview';
 // import { AuthProvider } from './Context/AuthContext';
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About/>} />
           <Route path="/cart" element={<Cart/>} />
+          <Route path="/product" element={<Product/>} />
           <Route path="/product/:id" element={<ProductPreview product={product} />} />
         </Routes>
         <Footer/>
