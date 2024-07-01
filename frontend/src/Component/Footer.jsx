@@ -52,7 +52,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="container mx-auto px-4 mt-4 text-center">
-                <p className="text-sm">&copy; {new Date().getFullYear()} Xxxxxxxxx Pustak Pasal | All rights reserved.</p>
+                <p className="text-sm">&copy; {new Date().getFullYear()} Xxxxxxxxx Pustak Pasal | Developed by Mandakini Sapkota | All rights reserved.</p>
             </div>
         </footer>
     );

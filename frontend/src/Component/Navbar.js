@@ -63,6 +63,19 @@ const Navbar = () => {
               >
                 About Us
               </NavLink>
+              
+            </li>
+            <li className="mr-6">
+              <NavLink
+                to="/free_products"
+                className={({ isActive }) =>
+                  isActive
+                    ? 'block mt-4 sm:mt-0 text-gray-800 font-semibold border-b-2 border-red-600'
+                    : 'block mt-4 sm:mt-0 text-gray-600 hover:text-gray-800'
+                }
+              >
+                Free Products
+              </NavLink>
             </li>
             <li className="mr-6">
               <NavLink

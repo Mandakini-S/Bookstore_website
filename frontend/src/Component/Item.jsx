@@ -21,7 +21,7 @@ const Item = (props) => {
           {/* <p className="text-gray-500 dark:text-gray-400 max-w-80">{category}</p> */}
           <p className="text-gray-500 dark:text-gray-400 max-w-80">{description}</p>
           <div className="flex flex-row gap-3 mt-auto">
-            <p className="font-semibold text-black dark:text-black">$ {price}</p>
+            <p className="font-semibold text-black dark:text-black">Rs. {price}</p>
           </div>
         </div>
       </Link>
