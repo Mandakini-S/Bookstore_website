@@ -20,7 +20,7 @@ const Footer = () => {
                         className="cursor-pointer w-60"
                     />
                     <div>
-                        <span className="text-xl text-[#f48908] font-bold block">Xxxxxxxxx Pustak Pasal</span>
+                        <span className="text-xl text-[#f48908] font-bold block">Aaaaaaaaa Pustak Pasal</span>
                         <p className="text-lg">Whether you're a book lover, a sports enthusiast, or someone looking for quality stationery,<br/> we have something special for everyone.</p>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="container mx-auto px-4 mt-4 text-center">
-                <p className="text-sm">&copy; {new Date().getFullYear()} Xxxxxxxxx Pustak Pasal | Developed by Mandakini Sapkota | All rights reserved.</p>
+                <p className="text-sm">&copy; {new Date().getFullYear()} Xxxxxxxxx Pustak Pasal | Mandakini Sapkota | All rights reserved.</p>
             </div>
         </footer>
     );

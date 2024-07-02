@@ -7,10 +7,10 @@ const About = () => {
       <div className="flex flex-col mb-20 md:flex-col xl:flex-row w-full mx-auto mt-20 sm:w-11/12 md:w-3/4 lg:w-3/4 xl:w-3/4 px-4 py-8 sm:px-6 md:px-8 lg:px-10 rounded-3xl bg-[#347576]">
         <div className="flex flex-col justify-center px-4 py-6 md:px-8 lg:px-2 text-gray-700">
           <h1 className="text-3xl sm:text-4xl text-[#f48908] md:text-5xl mb-4 font-Poppins">
-          Welcome to Xxxxxxxxx Pustak Pasal!
+          Welcome to Aaaaaaaaa Pustak Pasal!
           </h1>
           <p className="text-base text-white sm:text-lg text-whitemd:text-xl mb-4">
-          At XXXXXXXXX Pustak Pasal, we pride ourselves on being your one-stop destination for all your reading, sports, and stationery needs. Whether you're a book lover, a sports enthusiast, or someone looking for quality stationery, we have something special for everyone.
+          At Aaaaaaaaa Pustak Pasal, we pride ourselves on being your one-stop destination for all your reading, sports, and stationery needs. Whether you're a book lover, a sports enthusiast, or someone looking for quality stationery, we have something special for everyone.
 
           </p>
           <h2 className="text-2xl sm:text-3xl text-[#f48908] mb-2">Why Us?</h2>

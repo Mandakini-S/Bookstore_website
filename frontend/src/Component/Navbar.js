@@ -79,7 +79,7 @@ const Navbar = () => {
             </li>
             <li className="mr-6">
               <NavLink
-                to="/how-it-works"
+                to="/contact"
                 className={({ isActive }) =>
                   isActive
                     ? 'block mt-4 sm:mt-0 text-gray-800 font-semibold border-b-2 border-red-600'
