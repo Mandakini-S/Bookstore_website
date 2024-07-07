@@ -11,9 +11,12 @@ from .serializers import ProductSerializer
 from .serializers import OrderSerializer
 from .serializers import CategorySerializer
 from django.shortcuts import get_object_or_404  
-# Create your views here.  
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from .permissions import IsAdminOrReadOnly 
+ 
   
 class CustomerView(APIView):  
+    permission_classes = [IsAdminUser]
   
     def get(self, request, id):  
         result = Customer.objects.get(id=id)  
@@ -51,7 +54,8 @@ class CustomerView(APIView):
 
 
 class ProductView(APIView):
-
+    permission_classes = [IsAdminOrReadOnly]
+     
     def get(self, request, id=None):
         if id:
             product = get_object_or_404(Products, id=id)
@@ -87,6 +91,7 @@ class ProductView(APIView):
 #Order view
 
 class OrderView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id=None):
         if id:
@@ -124,6 +129,7 @@ class OrderView(APIView):
 #category view
 
 class CategoryView(APIView):
+    permission_classes = [IsAdminUser]
 
     def get(self, request, id=None):
         if id:
