@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.utils import timezone
+# from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 
 
 class UserManager(BaseUserManager):
@@ -27,7 +29,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class UserData(AbstractUser):
+class UserData(AbstractUser, PermissionsMixin):
 
     username = None #As I want to authenticate using email
     name = models.CharField(max_length=100, unique=True)
