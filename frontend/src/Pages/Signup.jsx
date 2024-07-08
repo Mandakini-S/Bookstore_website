@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../Component/axios';
 import loginimage from '../assets/login_page.jpg';
 
 const Signup = () => {
@@ -27,34 +27,19 @@ const Signup = () => {
     console.log('Sending data to the server:', signupData);
 
     try {
-      const response = await axios.post(
-        'http://127.0.0.1:8000/account/api/register/',
-        JSON.stringify(signupData),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      if (response.status === 200) {
-        navigate('/login');
-      }
+      await axiosInstance.post('register/', signupData)
+        .then((res) => {
+          console.log(res);
+          console.log(res.data);
+          navigate('/login');
+        });
     } catch (error) {
       console.error('There was an error signing up!', error);
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
         setError(error.response.data.detail || 'There was an error signing up! Please try again.');
       } else if (error.request) {
-        // The request was made but no response was received
-        console.error('Request data:', error.request);
         setError('No response received from the server.');
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error message:', error.message);
         setError('There was an error signing up! Please try again.');
       }
     }

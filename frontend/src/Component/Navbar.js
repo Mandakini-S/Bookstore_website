@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { FaUser, FaShoppingCart } from 'react-icons/fa'; // Importing icons
 import HamburgerIcon from '../assets/hamburger.png';
 import BrandIcon from '../assets/logo.png';
 
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar);
@@ -63,7 +72,6 @@ const Navbar = () => {
               >
                 About Us
               </NavLink>
-              
             </li>
             <li className="mr-6">
               <NavLink
@@ -119,7 +127,7 @@ const Navbar = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="/feature"
+                to="/product"
                 className={({ isActive }) =>
                   isActive
                     ? 'block mt-4 sm:mt-0 text-gray-800 font-semibold border-b-2 border-red-600'
@@ -143,7 +151,19 @@ const Navbar = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="/how-it-works"
+                to="/free_products"
+                className={({ isActive }) =>
+                  isActive
+                    ? 'block mt-4 sm:mt-0 text-gray-800 font-semibold border-b-2 border-red-600'
+                    : 'block mt-4 sm:mt-0 text-gray-600 hover:text-gray-800'
+                }
+              >
+                Free Products
+              </NavLink>
+            </li>
+            <li className="mb-4">
+              <NavLink
+                to="/contact"
                 className={({ isActive }) =>
                   isActive
                     ? 'block mt-4 sm:mt-0 text-gray-800 font-semibold border-b-2 border-red-600'
@@ -156,12 +176,34 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex items-center mx-5">
-        <button className="font-poppins cursor-pointer text-lg m-5 border text-black dark:text-white bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 rounded-3xl px-4 py-1 hover:text- active:bg-slate-200 dark:active:bg-slate-700" style={{ backgroundColor: '#347576' }}>
-      <NavLink to="/login" className="hover:text-#f48908 dark:hover:text-#f48908">
-        Login
-      </NavLink>
-    </button>
+          {isAuthenticated ? (
+            <>
+              <NavLink to="/logout" className="mx-2">
+                <button
+                  className="font-poppins cursor-pointer text-lg text-black dark:text-black hover:text- active:bg-slate-200 dark:active:bg-slate-700"
+                  
+                >
+                  Logout
+                </button>
+              </NavLink>
+              
+              <NavLink to="/cart" className="text-gray-600 hover:text-[#f48908] mx-2">
+                <FaShoppingCart size={24} />
+              </NavLink>
 
+              <NavLink to="/account" className="text-gray-600 hover:text-[#f48908] mx-2">
+                <FaUser size={24} />
+              </NavLink>
+            </>
+          ) : (
+            <NavLink
+              to="/login"
+              className="font-poppins cursor-pointer text-lg text-black dark:text-black hover:text- active:bg-slate-200 dark:active:bg-slate-700"
+             
+            >
+              Login
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>

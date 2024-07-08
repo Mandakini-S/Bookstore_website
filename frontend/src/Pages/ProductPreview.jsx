@@ -6,6 +6,7 @@ const ProductPreview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
+  const [quantity, setQuantity] = useState(1); // State for quantity
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -23,10 +24,20 @@ const ProductPreview = () => {
     fetchProduct();
   }, [id]);
 
+  const handleAddToCart = () => {
+    // Implement your add to cart logic here
+    console.log(`Added ${quantity} item(s) to cart`);
+  };
+
+  const handleOrderNow = () => {
+    // Implement your order now logic here
+    console.log(`Ordering ${quantity} item(s) now`);
+  };
+
   if (!product) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5 border-2 border-gray-300 rounded-2xl md:mx-20">
+    <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5  rounded-2xl md:mx-20">
       <div className="flex flex-col md:flex-row w-full items-center">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start">
           <img src={mainImage} alt={product.name} className="w-full max-w-xs rounded-lg" />
@@ -48,6 +59,30 @@ const ProductPreview = () => {
               />
             ))}
           </div>
+          <div className="mt-5 flex items-center justify-center md:justify-start space-x-4">
+            <label className="text-gray-700 ">Quantity:</label>
+            <input
+              type="number"
+              min="1"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value))}
+              className="border-gray-300 border-2 rounded-md px-3 py-1 focus:outline-none  focus:border-blue-200"
+            />
+            </div>
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-500 hover:bg-blue-600 mt-10 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              style={{ backgroundColor: '#347576' }}
+            >
+              Add to Cart
+            </button>
+            {/* <button
+              onClick={handleOrderNow}
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-green-300"
+            >
+              Order Now
+            </button> */}
+          
         </div>
       </div>
     </div>

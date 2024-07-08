@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import axiosInstance from '../Component/axios';
 import loginimage from '../assets/login_page.jpg';
 
 const Login = () => {
@@ -11,14 +12,15 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/account/api/login/', {
-        email,
-        password,
+      const response = await axiosInstance.post('login/', {
+        email: email,
+        password: password,
       });
-      if (response.status === 200) {
-        // Assuming successful login, navigate to '/'
-        navigate('/');
-      }
+      localStorage.setItem('access_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
+      axiosInstance.defaults.headers['Authorization'] =
+        'JWT ' + localStorage.getItem('access_token');
+      navigate('/');
     } catch (error) {
       console.error('There was an error logging in!', error);
       // Handle login error, e.g., show a notification
