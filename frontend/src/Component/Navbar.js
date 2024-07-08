@@ -180,8 +180,8 @@ const Navbar = () => {
             <>
               <NavLink to="/logout" className="mx-2">
                 <button
-                  className="font-poppins cursor-pointer text-lg border text-black dark:text-white bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 rounded-3xl px-4 py-1 hover:text- active:bg-slate-200 dark:active:bg-slate-700 "
-                  style={{ backgroundColor: '#347576' }}
+                  className="font-poppins cursor-pointer text-lg text-black dark:text-black hover:text- active:bg-slate-200 dark:active:bg-slate-700"
+                  
                 >
                   Logout
                 </button>
@@ -198,8 +198,8 @@ const Navbar = () => {
           ) : (
             <NavLink
               to="/login"
-              className="font-poppins cursor-pointer text-lg border text-black dark:text-white bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-600 rounded-3xl px-4 py-1 hover:text- active:bg-slate-200 dark:active:bg-slate-700"
-              style={{ backgroundColor: '#347576' }}
+              className="font-poppins cursor-pointer text-lg text-black dark:text-black hover:text- active:bg-slate-200 dark:active:bg-slate-700"
+             
             >
               Login
             </NavLink>
