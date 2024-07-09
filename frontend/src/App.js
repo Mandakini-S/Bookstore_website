@@ -11,12 +11,12 @@ import Footer from './Component/Footer';
 import Product from './Pages/Product';
 import Contact from './Pages/Contact';
 import ProductPreview from './Pages/ProductPreview';
-// import { AuthProvider } from './Context/AuthContext';
+import { AuthProvider } from './Context/AuthContext'; // Import AuthProvider
 
 const AppContent = () => {
   const location = useLocation();
   const noNavbarPaths = ['/login', '/signup'];
-  const noFooterPaths = ['/login', '/signup']; // You can extend this as needed
+  const noFooterPaths = ['/login', '/signup']; 
 
   return (
     <>
@@ -39,11 +39,11 @@ const AppContent = () => {
 
 function App() {
   return (
-    // <AuthProvider>
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
-    // </AuthProvider>
+    <AuthProvider> 
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
