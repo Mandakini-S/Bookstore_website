@@ -3,7 +3,7 @@ from django.urls import path
 from .views import CustomerView
 from .views import ProductView
 from .views import OrderView
-from .views import CategoryView
+from .views import CategoryView, CartItemView
 
 
 urlpatterns = [
@@ -18,6 +18,8 @@ urlpatterns = [
     path('orders/<int:id>/update/', OrderView.as_view()),
     path('categories/', CategoryView.as_view()),
     path('categories/<int:id>/', CategoryView.as_view()),
-    path('categories/<int:id>/update', CategoryView.as_view())
+    path('categories/<int:id>/update', CategoryView.as_view()),
+    path('cartitem/<int:id>/', CartItemView.as_view(), name='cartitem-detail'),
+    path('cartitem/', CartItemView.as_view(), name='cartitem-list'),
 ]
 

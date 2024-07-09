@@ -2,7 +2,8 @@ from rest_framework import serializers
 from .models import Customer  
 from .models import Order
 from .models import Products
-from .models import Category
+from account.models import UserData
+from .models import Category, CartItem
   
 class CustomerSerializer(serializers.ModelSerializer):  
     first_name = serializers.CharField(max_length=200, required=True)  
@@ -44,4 +45,15 @@ class CategorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Category
+        fields = '__all__'
+        
+
+class CartItemSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=UserData.objects.all())
+    product = serializers.PrimaryKeyRelatedField(queryset=Products.objects.all())
+    quantity = serializers.IntegerField(required=True)
+    added_at = serializers.DateTimeField(required=True)
+
+    class Meta:
+        model = CartItem
         fields = '__all__'
