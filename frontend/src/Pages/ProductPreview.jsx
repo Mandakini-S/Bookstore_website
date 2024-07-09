@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AuthContext from '../Context/AuthContext';
 
 const ProductPreview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
-  const [quantity, setQuantity] = useState(1); // State for quantity
+  const [quantity, setQuantity] = useState(1);
+  const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,20 +27,35 @@ const ProductPreview = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
-    // Implement your add to cart logic here
-    console.log(`Added ${quantity} item(s) to cart`);
+  const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    } else {
+      try {
+        const response = await axios.post(`http://127.0.0.1:8000/api/cart/`, {
+          product_id: id,
+          quantity,
+        });
+        console.log('Added to cart:', response.data);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
+    }
   };
 
   const handleOrderNow = () => {
-    // Implement your order now logic here
-    console.log(`Ordering ${quantity} item(s) now`);
+    if (!isAuthenticated) {
+      navigate('/login');
+    } else {
+      // Implement your order now logic here
+      console.log(`Ordering ${quantity} item(s) now`);
+    }
   };
 
   if (!product) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5  rounded-2xl md:mx-20">
+    <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5 rounded-2xl md:mx-20">
       <div className="flex flex-col md:flex-row w-full items-center">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start">
           <img src={mainImage} alt={product.name} className="w-full max-w-xs rounded-lg" />
@@ -60,29 +78,22 @@ const ProductPreview = () => {
             ))}
           </div>
           <div className="mt-5 flex items-center justify-center md:justify-start space-x-4">
-            <label className="text-gray-700 ">Quantity:</label>
+            <label className="text-gray-700">Quantity:</label>
             <input
               type="number"
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
-              className="border-gray-300 border-2 rounded-md px-3 py-1 focus:outline-none  focus:border-blue-200"
+              className="border-gray-300 border-2 rounded-md px-3 py-1 focus:outline-none focus:border-blue-200"
             />
-            </div>
-            <button
-              onClick={handleAddToCart}
-              className="bg-blue-500 hover:bg-blue-600 mt-10 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              style={{ backgroundColor: '#347576' }}
-            >
-              Add to Cart
-            </button>
-            {/* <button
-              onClick={handleOrderNow}
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-green-300"
-            >
-              Order Now
-            </button> */}
-          
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className="bg-blue-500 hover:bg-blue-600 mt-10 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+            style={{ backgroundColor: '#347576' }}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>
