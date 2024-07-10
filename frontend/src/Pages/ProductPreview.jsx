@@ -8,7 +8,7 @@ const ProductPreview = () => {
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext); // Access user from context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,9 +30,13 @@ const ProductPreview = () => {
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
       navigate('/login');
+    } else if (!user || !user.id) {
+      console.error('User information is not available.');
+      // Handle the case where user information is missing or invalid
     } else {
       try {
-        const response = await axios.post(`http://127.0.0.1:8000/api/cart/`, {
+        const response = await axios.post(`http://127.0.0.1:8000/api/cartitem/`, {
+          user: user.id,
           product_id: id,
           quantity,
         });
