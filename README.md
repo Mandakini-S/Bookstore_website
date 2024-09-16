@@ -7,7 +7,6 @@ This project was part of my 60 days of learning [Learning with Leapfrog] challen
 
 
 ## Table of Content
-- [Table of Content](#table-of-content)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Prerequisites](#prerequisites)
