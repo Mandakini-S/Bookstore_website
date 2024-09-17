@@ -138,6 +138,5 @@ Contributions are welcome! Please follow these steps:
 4. Commit and push your changes (`git commit -m "Add new feature"`).
 5. Submit a pull request.
 
-<div style="text-align: center; font-weight: bold; font-size: 20px;">Happy coding !</div>
-
+<div align = 'center'><b>Happy coding !</b></div>
 
