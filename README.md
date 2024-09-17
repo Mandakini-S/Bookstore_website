@@ -47,7 +47,7 @@ cd https://github.com/Mandakini-S/Bookstore_website.git
 
 ```
 
-## Setting up the Backend:
+## Setting up the Backend
 
 #### 1. Navigate to Backend folder:
 ```bash
