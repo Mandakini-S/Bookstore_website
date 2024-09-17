@@ -11,7 +11,7 @@ This project was part of my 60 days of learning [Learning with Leapfrog] challen
 - [Technologies Used](#technologies-used)
 - [Prerequisites](#prerequisites)
 - [Cloning the Project](#cloning-the-project)
-- [Setting up the Backend:](#setting-up-the-backend)
+- [Setting up the Backend](#setting-up-the-backend)
 - [Setting Up the Frontend (React)](#setting-up-the-frontend-react)
 - [Running the Project](#running-the-project)
 - [Contributing](#contributing)
