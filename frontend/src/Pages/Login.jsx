@@ -18,6 +18,7 @@ const Login = () => {
       });
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       axiosInstance.defaults.headers['Authorization'] =
         'JWT ' + localStorage.getItem('access_token');
       navigate('/');

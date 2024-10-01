@@ -57,9 +57,9 @@ cd Backend
 
 ```bash
 
-python -m venv venv
+python3 -m venv .venv
 # for Linux/macOS
-source venv/bin/activate 
+source .venv/bin/activate 
  # for Windows
 .\venv\Scripts\activate  
 
@@ -87,18 +87,18 @@ DB_PORT=5432
 
 #### 5. Apply migrations:
 ```bash
-python manage.py migrate
+python3 manage.py migrate
 ```
 
 #### 6. Create a superuser (for admin panel access):
 ```bash
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 
 ```
 
 #### 7. Run the Django development server:
 ```bash
-python manage.py runserver
+python3 manage.py runserver
 
 ```
 
