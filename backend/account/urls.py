@@ -1,3 +1,4 @@
+# account/urls.py
 from django.urls import path
 from .views import RegisterView, BlacklistTokenUpdateView
 # from .views import UserListView

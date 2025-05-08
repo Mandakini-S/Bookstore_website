@@ -1,3 +1,4 @@
+// Pages/ProductPreview.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -32,29 +33,41 @@ const ProductPreview = () => {
       navigate('/login');
     } else if (!user || !user.id) {
       console.error('User information is not available.');
-      // Handle the case where user information is missing or invalid
     } else {
       try {
-        const response = await axios.post(`http://127.0.0.1:8000/api/cartitem/`, {
-          user: user.id,
-          product_id: id,
-          quantity,
-        });
+        const token = localStorage.getItem('access_token');
+  
+        const response = await axios.post(
+          `http://127.0.0.1:8000/api/cartitem/`,
+          {
+            user: user.id,
+            product_id: id,
+            quantity,
+          },
+          {
+            headers: {
+              Authorization: `Token ${token}`,  
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+  
         console.log('Added to cart:', response.data);
       } catch (error) {
         console.error('Error adding to cart:', error);
       }
     }
   };
+  
 
-  const handleOrderNow = () => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    } else {
-      // Implement your order now logic here
-      console.log(`Ordering ${quantity} item(s) now`);
-    }
-  };
+  // const handleOrderNow = () => {
+  //   if (!isAuthenticated) {
+  //     navigate('/login');
+  //   } else {
+  //     // Implement your order now logic here
+  //     console.log(`Ordering ${quantity} item(s) now`);
+  //   }
+  // };
 
   if (!product) return <div>Loading...</div>;
 

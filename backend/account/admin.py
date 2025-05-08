@@ -1,3 +1,4 @@
+# account/admin.py
 from django.contrib import admin
 from .models import UserData
 from django.contrib.auth.admin import UserAdmin

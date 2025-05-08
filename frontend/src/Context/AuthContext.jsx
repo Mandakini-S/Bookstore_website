@@ -1,3 +1,4 @@
+// Context/AuthContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -10,17 +11,28 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     const storedUser = localStorage.getItem('user');
-
+  
     if (token && storedUser) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(storedUser)); // Retrieve and parse user from localStorage
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setIsAuthenticated(true);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error('Failed to parse user from localStorage:', error);
+        setIsAuthenticated(false);
+        setUser(null);
+      }
     }
   }, []);
+  
 
   // Function to update authentication state and store data in localStorage
   const login = (token, userData) => {
     localStorage.setItem('access_token', token); // Save token in localStorage
-    localStorage.setItem('user', JSON.stringify(userData)); // Save user data in localStorage
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
+    
     setIsAuthenticated(true);
     setUser(userData);
   };
