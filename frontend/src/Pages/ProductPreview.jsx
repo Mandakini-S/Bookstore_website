@@ -9,7 +9,7 @@ const ProductPreview = () => {
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { isAuthenticated, user } = useContext(AuthContext); // Access user from context
+  const { isAuthenticated, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,45 +31,38 @@ const ProductPreview = () => {
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
       navigate('/login');
-    } else if (!user || !user.id) {
+      return;
+    }
+
+    if (!user || !user.id) {
       console.error('User information is not available.');
-    } else {
-      try {
-        const token = localStorage.getItem('access_token');
-  
-        const response = await axios.post(
-          `http://127.0.0.1:8000/api/cartitem/`,
-          {
-            user: user.id,
-            product_id: id,
-            quantity,
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/cartitem/`,
+        {
+          product: id,
+          quantity,
+          
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            headers: {
-              Authorization: `Token ${token}`,  
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-  
-        console.log('Added to cart:', response.data);
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-      }
+        }
+      );
+
+      console.log('Added to cart:', response.data);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
     }
   };
-  
 
-  // const handleOrderNow = () => {
-  //   if (!isAuthenticated) {
-  //     navigate('/login');
-  //   } else {
-  //     // Implement your order now logic here
-  //     console.log(`Ordering ${quantity} item(s) now`);
-  //   }
-  // };
-
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <div>Loading product...</div>;
 
   return (
     <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5 rounded-2xl md:mx-20">

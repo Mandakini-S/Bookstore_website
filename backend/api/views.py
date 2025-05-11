@@ -2,11 +2,21 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .models import Products, Order, Category, CartItem
 from .serializers import CustomerSerializer, ProductSerializer, OrderSerializer, CategorySerializer, CartItemSerializer
 from .permissions import IsAdminOrReadOnly
+# from rest_framework.permissions import AllowAny
+
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class CustomerView(APIView):
     permission_classes = [IsAdminUser]
@@ -154,7 +164,9 @@ class CategoryView(APIView):
 
 class CartItemView(APIView):
     permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
 
+    
     def get(self, request, id=None):
         if id:
             cart_item = get_object_or_404(CartItem, id=id, user=request.user)
@@ -186,3 +198,31 @@ class CartItemView(APIView):
         cart_item = get_object_or_404(CartItem, id=id, user=request.user)
         cart_item.delete()
         return Response({"status": "success", "data": "Record Deleted"})
+
+
+# Custom Token Serializer
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user'] = {
+            "id": self.user.id,
+            "username": self.user.username,
+            "email": self.user.email
+        }
+        return data
+
+# Custom Token View
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+    
+class LogoutAndBlacklistRefreshTokenForUserView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

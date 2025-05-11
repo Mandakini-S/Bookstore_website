@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+// Pages/Login.jsx
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import AuthContext from '../Context/AuthContext';
 import axiosInstance from '../Component/axios';
 import loginimage from '../assets/login_page.jpg';
 
@@ -8,11 +10,14 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); 
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axiosInstance.post('login/', {
+      const response = await axiosInstance.post('token/', {
         email: email,
         password: password,
       });
@@ -21,6 +26,8 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       axiosInstance.defaults.headers['Authorization'] =
         'JWT ' + localStorage.getItem('access_token');
+        login(response.data.access, response.data.user);
+        console.log('Login response:', response.data);
       navigate('/');
     } catch (error) {
       console.error('There was an error logging in!', error);

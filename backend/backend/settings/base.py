@@ -1,12 +1,13 @@
+# settings/base.py
 import os
 from pathlib import Path
 from datetime import timedelta
-
 from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 print(f"BASE_DIR: {BASE_DIR}")
-env_path = load_dotenv(os.path.join(BASE_DIR, ".venv"))
+# env_path = load_dotenv(os.path.join(BASE_DIR, ".venv"))
 
 # load_dotenv(env_path)
 
@@ -35,6 +36,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 INSTALLED_APPS = DEFAULT_APP + LOCAL_APPS + THIRD_PARTY_APPS
@@ -111,12 +113,12 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
-    # 'SIGNING_KEY': SECRET_KEY,
+    'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
     'AUTH_HEADER_TYPES': ('JWT',),
     'USER_ID_FIELD': 'id',

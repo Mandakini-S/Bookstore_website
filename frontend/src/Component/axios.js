@@ -1,14 +1,15 @@
+// Components/axios.js
 import axios from 'axios';
 
-const baseURL = 'http://127.0.0.1:8000/account/api';
+const baseURL = 'http://127.0.0.1:8000/api';
 
 const axiosInstance = axios.create({
 	baseURL: baseURL,
 	timeout: 5000,
 	headers: {
 		Authorization: localStorage.getItem('access_token')
-			? 'JWT ' + localStorage.getItem('access_token')
-			: null,
+    ? 'Bearer ' + localStorage.getItem('access_token')
+    : null,
 		'Content-Type': 'application/json',
 		accept: 'application/json',
 	}, 
@@ -59,10 +60,9 @@ axiosInstance.interceptors.response.use(
 							localStorage.setItem('access_token', response.data.access);
 							localStorage.setItem('refresh_token', response.data.refresh);
 
-							axiosInstance.defaults.headers['Authorization'] =
-								'JWT ' + response.data.access;
-							originalRequest.headers['Authorization'] =
-								'JWT ' + response.data.access;
+							axiosInstance.defaults.headers['Authorization'] = 'Bearer ' + response.data.access;
+                            originalRequest.headers['Authorization'] = 'Bearer ' + response.data.access;
+
 
 							return axiosInstance(originalRequest);
 						})

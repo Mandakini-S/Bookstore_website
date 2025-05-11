@@ -1,4 +1,5 @@
 // Context/AuthContext.jsx
+
 import React, { createContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
@@ -6,38 +7,39 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); 
 
-  // Effect to check local storage for authentication data on initial load
+  // Check localStorage on mount
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     const storedUser = localStorage.getItem('user');
-  
+
     if (token && storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        setIsAuthenticated(true);
         setUser(parsedUser);
+        setIsAuthenticated(true);
       } catch (error) {
         console.error('Failed to parse user from localStorage:', error);
-        setIsAuthenticated(false);
         setUser(null);
+        setIsAuthenticated(false);
       }
     }
-  }, []);
-  
 
-  // Function to update authentication state and store data in localStorage
+    setLoading(false); 
+  }, []);
+
   const login = (token, userData) => {
-    localStorage.setItem('access_token', token); // Save token in localStorage
+    localStorage.setItem('access_token', token);
     if (userData) {
       localStorage.setItem('user', JSON.stringify(userData));
     }
-    
+
     setIsAuthenticated(true);
     setUser(userData);
+    console.log(isAuthenticated);
   };
 
-  // Function to clear authentication data
   const logout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
@@ -46,8 +48,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
+      {!loading && children} {/* ✅ Only render children after auth check */}
     </AuthContext.Provider>
   );
 };

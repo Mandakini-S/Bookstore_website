@@ -48,13 +48,13 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
         
-
+        
 class CartItemSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=UserData.objects.all())
     product = serializers.PrimaryKeyRelatedField(queryset=Products.objects.all())
     quantity = serializers.IntegerField(required=True)
-    added_at = serializers.DateTimeField(required=True)
 
     class Meta:
         model = CartItem
         fields = '__all__'
+        read_only_fields = ['user', 'added_at']
