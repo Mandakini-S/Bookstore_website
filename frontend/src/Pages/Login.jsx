@@ -25,7 +25,7 @@ const Login = () => {
       localStorage.setItem('refresh_token', response.data.refresh);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       axiosInstance.defaults.headers['Authorization'] =
-        'JWT ' + localStorage.getItem('access_token');
+        'Bearer ' + localStorage.getItem('access_token');
         login(response.data.access, response.data.user);
         console.log('Login response:', response.data);
       navigate('/');
