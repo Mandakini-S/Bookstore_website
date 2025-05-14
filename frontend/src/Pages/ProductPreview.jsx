@@ -8,7 +8,7 @@ const ProductPreview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const baseUrl = 'http://localhost:8000';
 
@@ -42,11 +42,6 @@ const ProductPreview = () => {
     return;
   }
 
-  if (!user?.id) {
-    console.error('User information is not available. Cannot proceed with adding to cart.');
-    return;
-  }
-
   const token = localStorage.getItem('access_token');
   if (!token) {
     console.error('No access token found. User may not be logged in.');
@@ -58,9 +53,9 @@ const ProductPreview = () => {
     const response = await axios.post(
       `${baseUrl}/api/cartitem/`,
       {
-        product: id,
-        quantity,
-        user: user.id,  // Pass the user ID here
+        product_id: id,
+        quantity: quantity,
+        // ❌ REMOVE user: user.id
       },
       {
         headers: {
@@ -72,9 +67,13 @@ const ProductPreview = () => {
     console.log('Successfully added to cart:', response.data);
   } catch (error) {
     console.error('Error adding to cart:', error);
+    if (error.response?.data) {
+      console.log('Backend says:', error.response.data);
+    }
     alert('There was an error adding the item to the cart. Please try again later.');
   }
 };
+
 
 
   // If product is not loaded, show loading message

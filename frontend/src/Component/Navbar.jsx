@@ -1,20 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaUser, FaShoppingCart } from 'react-icons/fa'; // Importing icons
+import { FaUser, FaShoppingCart } from 'react-icons/fa';
 import HamburgerIcon from '../assets/hamburger.png';
 import BrandIcon from '../assets/logo.png';
+import AuthContext from '../Context/AuthContext';
 
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useContext(AuthContext);  // Use AuthContext directly
+  const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+    // Only fetch cart items if the user is authenticated
+    const fetchCartItems = async () => {
+      const token = localStorage.getItem('access_token');
+      if (!isAuthenticated || !token) return;
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/cartitem/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error('Cart fetch failed');
+        const data = await response.json();
+        setCartItems(data); // Adjust if data is wrapped in a key
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    };
+
+    fetchCartItems();
+  }, [isAuthenticated]);  // This hook depends on authentication status
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar);
@@ -181,16 +200,16 @@ const Navbar = () => {
               <NavLink to="/logout" className="mx-2">
                 <button
                   className="font-poppins cursor-pointer text-lg text-black dark:text-black hover:text- active:bg-slate-200 dark:active:bg-slate-700"
-                  
                 >
                   Logout
                 </button>
               </NavLink>
-              
-              <NavLink to="/cart" className="text-gray-600 hover:text-[#f48908] mx-2">
-                <FaShoppingCart size={24} />
+              <NavLink to="/cart" className="mx-2">
+                <FaShoppingCart
+                  size={24}
+                  className={cartItems.length > 0 ? 'text-red-600' : 'text-gray-600'}
+                />
               </NavLink>
-
               <NavLink to="/account" className="text-gray-600 hover:text-[#f48908] mx-2">
                 <FaUser size={24} />
               </NavLink>
@@ -199,7 +218,6 @@ const Navbar = () => {
             <NavLink
               to="/login"
               className="font-poppins cursor-pointer text-lg text-black dark:text-black hover:text- active:bg-slate-200 dark:active:bg-slate-700"
-             
             >
               Login
             </NavLink>

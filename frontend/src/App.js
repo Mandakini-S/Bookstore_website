@@ -13,6 +13,7 @@ import Product from './Pages/Product';
 import Contact from './Pages/Contact';
 import ProductPreview from './Pages/ProductPreview';
 import { AuthProvider } from './Context/AuthContext'; // Import AuthProvider
+import { ShopProvider } from './Context/ShopContext';
 
 const AppContent = () => {
   const location = useLocation();
@@ -41,9 +42,11 @@ const AppContent = () => {
 function App() {
   return (
     <AuthProvider> 
+      <ShopProvider> 
       <BrowserRouter>
         <AppContent />
       </BrowserRouter>
+      </ShopProvider>
     </AuthProvider>
   );
 }

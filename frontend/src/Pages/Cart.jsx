@@ -1,3 +1,4 @@
+// Pages/Cart.jsx
 import React from "react";
 import CartItems from "../Component/CartItems";
 const Cart = () => {
