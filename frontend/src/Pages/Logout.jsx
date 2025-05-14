@@ -16,6 +16,7 @@ const Logout = () => {
       }
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
       delete axiosInstance.defaults.headers['Authorization'];
       navigate('/login');
     };
