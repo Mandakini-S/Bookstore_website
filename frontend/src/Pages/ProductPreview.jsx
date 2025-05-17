@@ -1,109 +1,100 @@
 // Pages/ProductPreview.jsx
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../Component/axios';
 import AuthContext from '../Context/AuthContext';
 
 const ProductPreview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const baseUrl = 'http://localhost:8000';
 
-  // Fetch product details
+  // Fetch product
   const fetchProduct = useCallback(async () => {
-    console.log(`Fetching product with ID: ${id}`);
-
     try {
-      const response = await axios.get(`${baseUrl}/api/products/${id}/`);
+      const response = await axiosInstance.get(`/api/products/${id}/`);
       if (response.data.status === 'success') {
-        console.log('Product fetched successfully:', response.data.product);
         setProduct(response.data.product);
       } else {
-        console.error('Failed to fetch product: Status not success', response.data);
+        console.error('Failed to fetch product:', response.data);
       }
     } catch (error) {
       console.error('Error fetching product:', error);
     }
   }, [id]);
 
-  // UseEffect to fetch product when ID changes
   useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
 
-  // Handle adding item to cart
   const handleAddToCart = async () => {
-  if (!isAuthenticated) {
-    console.warn('User is not authenticated. Redirecting to login...');
-    navigate('/login');
-    return;
-  }
-
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    console.error('No access token found. User may not be logged in.');
-    return;
-  }
-
-  console.log('Sending request to add product to cart...');
-  try {
-    const response = await axios.post(
-      `${baseUrl}/api/cartitem/`,
-      {
-        product_id: id,
-        quantity: quantity,
-        // ❌ REMOVE user: user.id
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log('Successfully added to cart:', response.data);
-  } catch (error) {
-    console.error('Error adding to cart:', error);
-    if (error.response?.data) {
-      console.log('Backend says:', error.response.data);
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
     }
-    alert('There was an error adding the item to the cart. Please try again later.');
-  }
-};
 
+    try {
+      await axiosInstance.post('/api/cartitem/', {
+        product_id: id,
+        quantity,
+      });
 
+      setMessage('Item successfully added to your cart.');
+      setMessageType('success');
+    } catch (error) {
+      console.error('Add to cart error:', error);
 
-  // If product is not loaded, show loading message
-  if (!product) {
-    console.log('Product is loading...');
-    return <div>Loading product...</div>;
-  }
+      const errorMsg =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        'There was an error adding the item to the cart.';
+
+      setMessage(errorMsg);
+      setMessageType('error');
+    }
+
+    setTimeout(() => {
+      setMessage('');
+      setMessageType('');
+    }, 3000);
+  };
 
   const handleImageClick = (image) => {
-    console.log(`Changing main image to: ${image}`);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
+    setProduct((prev) => ({
+      ...prev,
       mainImage: `${baseUrl}${image}`,
     }));
   };
 
-  // Validate the quantity input
   const handleQuantityChange = (e) => {
     const newQuantity = parseInt(e.target.value);
-    if (newQuantity < 1) {
-      console.warn('Quantity must be at least 1. Resetting to 1.');
-      setQuantity(1);
-    } else {
-      setQuantity(newQuantity);
-    }
+    setQuantity(newQuantity >= 1 ? newQuantity : 1);
   };
 
-  console.log('Rendering ProductPreview component');
+  if (!product) {
+    return <div>Loading product...</div>;
+  }
+
   return (
-    <div className="flex flex-col items-center max-w-4xl mx-auto sm:mx-5 my-24 p-5 rounded-2xl md:mx-20">
+    <div className="flex flex-col items-center max-w-4xl mx-auto my-24 p-5 rounded-2xl">
+      {/* Feedback Message */}
+      {message && (
+        <div
+          className={`mb-6 px-4 py-2 w-full text-center rounded border ${
+            messageType === 'success'
+              ? 'bg-green-100 text-green-700 border-green-300'
+              : 'bg-red-100 text-red-700 border-red-300'
+          }`}
+        >
+          {message}
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row w-full items-center">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start">
           <img
@@ -112,12 +103,15 @@ const ProductPreview = () => {
             className="w-full max-w-xs rounded-lg"
           />
         </div>
+
         <div className="text-center md:text-left mt-5 md:mt-0 md:ml-10 flex-grow flex flex-col justify-center">
           <h1 className="text-2xl font-bold">{product.name}</h1>
-          <p className="mt-2 text-gray-600 flex-grow">{product.description}</p>
+          <p className="mt-2 text-gray-600">{product.description}</p>
           <h2 className="mt-3 text-xl font-semibold">${product.price}</h2>
+
+          {/* Thumbnails */}
           <div className="flex justify-center md:justify-start mt-5 space-x-4">
-            {product.images && product.images.map((image, index) => (
+            {product.images?.map((image, index) => (
               <img
                 key={index}
                 src={`${baseUrl}${image}`}
@@ -129,6 +123,8 @@ const ProductPreview = () => {
               />
             ))}
           </div>
+
+          {/* Quantity input */}
           <div className="mt-5 flex items-center justify-center md:justify-start space-x-4">
             <label className="text-gray-700">Quantity:</label>
             <input
@@ -139,11 +135,12 @@ const ProductPreview = () => {
               className="border-gray-300 border-2 rounded-md px-3 py-1 focus:outline-none focus:border-blue-200"
             />
           </div>
+
+          {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="bg-blue-500 hover:bg-blue-600 mt-10 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
-            style={{ backgroundColor: '#347576' }}
-            disabled={quantity < 1 || !product} // Disable button when quantity is invalid or product is not loaded
+            className="bg-[#347576] hover:bg-[#2d5f61] mt-10 text-white px-4 py-2 rounded-md focus:outline-none"
+            disabled={quantity < 1 || !product}
           >
             Add to Cart
           </button>

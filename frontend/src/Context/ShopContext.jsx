@@ -1,34 +1,44 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 // Create the context
 export const ShopContext = createContext();
 
 export const ShopProvider = ({ children }) => {
   const [cartItem, setCartItem] = useState({});
-  const [all_products, setAllProducts] = useState([
-    // Example products
-    { id: 1, name: 'Shoes', price: 50 },
-    { id: 2, name: 'T-shirt', price: 30 },
-  ]);
+  const [all_products, setAllProducts] = useState([]);
 
-  const getCartTotalAmount = () => {
-    let total = 0;
-    for (let id in cartItem) {
-      const product = all_products.find(p => p.id === parseInt(id));
-      if (product) {
-        total += cartItem[id] * product.price;
+  // Fetch products dynamically
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/products/');
+        const data = await response.json();
+        setAllProducts(data);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
       }
-    }
-    return total;
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Calculate total price of items in cart
+  const getCartTotalAmount = () => {
+    return Object.entries(cartItem).reduce((total, [id, quantity]) => {
+      const product = all_products.find(p => p.id === parseInt(id));
+      return product ? total + quantity * product.price : total;
+    }, 0);
   };
 
+  // Add an item to cart
   const addToCart = (productId) => {
     setCartItem(prev => ({
       ...prev,
       [productId]: (prev[productId] || 0) + 1,
     }));
   };
-
+console.log(cartItem);
+  // Remove an item from cart
   const removeFromCart = (productId) => {
     setCartItem(prev => {
       const updated = { ...prev };
@@ -46,9 +56,9 @@ export const ShopProvider = ({ children }) => {
     <ShopContext.Provider value={{
       cartItem,
       all_products,
-      getCartTotalAmount,
       addToCart,
       removeFromCart,
+      getCartTotalAmount,
     }}>
       {children}
     </ShopContext.Provider>

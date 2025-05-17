@@ -13,34 +13,43 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    // Clear previous error
+    setError('');
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    const signupData = {
-      email,
-      name,
-      password,
-    };
-
-    console.log('Sending data to the server:', signupData);
+    const signupData = { email, name, password };
 
     try {
-      await axiosInstance.post('register/', signupData)
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          navigate('/login');
-        });
+      const res = await axiosInstance.post('/account/api/register/', signupData);
+      console.log(res.data);
+      navigate('/login');
     } catch (error) {
-      console.error('There was an error signing up!', error);
-      if (error.response) {
-        setError(error.response.data.detail || 'There was an error signing up! Please try again.');
+      console.error('Signup error:', error);
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+
+        if (typeof data === 'string') {
+          setError(data);
+        } else if (data.detail) {
+          setError(data.detail);
+        } else if (data.email) {
+          setError(`Email: ${data.email.join(', ')}`);
+        } else if (data.name) {
+          setError(`Username: ${data.name.join(', ')}`);
+        } else if (data.password) {
+          setError(`Password: ${data.password.join(', ')}`);
+        } else {
+          setError('There was an error signing up. Please check your input.');
+        }
       } else if (error.request) {
         setError('No response received from the server.');
       } else {
-        setError('There was an error signing up! Please try again.');
+        setError('There was an error signing up. Please try again.');
       }
     }
   };
@@ -50,7 +59,9 @@ const Signup = () => {
       <div className="bg-white pl-[10%] flex items-center justify-center w-1/2">
         <div className="mt-[40%] flex flex-col h-[75vh]">
           <h2 className="text-3xl font-semibold font-poppins">Welcome!</h2>
-          <h3 className="text-lg font-medium text-black mt-2 font-poppins">Please enter your details to sign up.</h3>
+          <h3 className="text-lg font-medium text-black mt-2 font-poppins">
+            Please enter your details to sign up.
+          </h3>
 
           <div className="flex items-center justify-between my-5">
             <div className="border-t w-full"></div>
@@ -100,10 +111,16 @@ const Signup = () => {
               />
             </div>
 
-            {error && <div className="text-red-500 text-sm mb-5">{error}</div>}
+            {error && (
+              <div className="text-red-500 text-sm mb-5 font-poppins">{error}</div>
+            )}
 
             <div>
-              <button type="submit" className="bg-blue-600 text-white rounded-xl h-14 w-[459px] my-5 text-lg" style={{ backgroundColor: '#f48908' }}>
+              <button
+                type="submit"
+                className="bg-blue-600 text-white rounded-xl h-14 w-[459px] my-5 text-lg"
+                style={{ backgroundColor: '#f48908' }}
+              >
                 Sign up
               </button>
             </div>

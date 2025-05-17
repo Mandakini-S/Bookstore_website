@@ -8,7 +8,7 @@ const Logout = () => {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        await axiosInstance.post('user/logout/blacklist/', {
+        await axiosInstance.post('/api/user/logout/blacklist/', {
           refresh_token: localStorage.getItem('refresh_token'),
         });
       } catch (error) {
